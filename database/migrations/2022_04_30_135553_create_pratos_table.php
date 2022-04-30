@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('tipo',50);
             $table->string('nome',50);
-            $table->decimal('cnpj',10,2);
+            $table->decimal('preco',10,2);
             $table->timestamps();
             //-----------Criando chave Estrangeira
             $table->bigInteger('restaurante_id')->unsigned();
