@@ -1,27 +1,34 @@
-Criar projeto
+#TP1 - Restaurante
 
-composer create-project --prefer-dist laravel/laravel myProjectName
+##Criar projeto
+
+_composer create-project --prefer-dist laravel/laravel myProjectName_
 
 
 Entrar na pasta do projeto
 
 Instalar interface de usuario
 
-composer require laravel/ui
+_composer require laravel/ui_
 
-php artisan ui react --auth
+_php artisan ui react --auth_
 
-npm install
+_npm install_
 
-npm run dev 
+_npm run dev_
 
+##Configurando o Banco
+Criar banco de dados (xampp Mysql)
 Configurar dados de conexão ao banco de dados no arquivo .env - colocar em DB_DATABASE o nome do bd
 
-Criando o model:
+
+##Criando o model:
 
 php artisan make:model Funcionario --controller --resource --migration --factory
 
 adicionar atributo aos models
+
+##Fazendo as Migrações Iniciais
 
 Dentro de app/Providers em AppServiceProvider inserir o comando:
 
@@ -30,5 +37,4 @@ Dentro de app/Providers em AppServiceProvider inserir o comando:
 Migrar as tabelas para o banco
 
 php artisan migrate
-
 
