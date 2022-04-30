@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('tipo_restaurantes', function (Blueprint $table) {
             $table->id();
+            $table->string('descricao',50);
             $table->timestamps();
         });
     }

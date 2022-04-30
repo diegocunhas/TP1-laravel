@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pratos', function (Blueprint $table) {
+        Schema::create('Restaurante_tipoRestaurante', function (Blueprint $table) {
             $table->id();
-            $table->string('tipo',50);
-            $table->string('nome',50);
-            $table->decimal('cnpj',10,2);
             $table->timestamps();
-            //-----------Criando chave Estrangeira
+            //----------Chaves Estrangeiras-----------//
             $table->bigInteger('restaurante_id')->unsigned();
             $table->foreign('restaurante_id')->references('id')->on('restaurantes');
-            
+            $table->bigInteger('tipoRestaurante_id')->unsigned();
+            $table->foreign('tipoRestaurante_id')->references('id')->on('tipo_restaurantes');
+            //----utilizar restrição de unique composta para evitar a redundancia de informação-----//
+            $table->unique(['restaurante_id','tipoRestaurante_id']);
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pratos');
+        Schema::dropIfExists('Restaurante_tipoRestaurante');
     }
 };

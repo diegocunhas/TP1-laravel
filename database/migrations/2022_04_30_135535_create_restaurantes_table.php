@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('restaurantes', function (Blueprint $table) {
             $table->id();
+            $table->string('razaoSocial',100);
+            $table->decimal('cnpj',13,0)->unique();
+            $table->string('telefone',50);
+            $table->string('endereco',100);
+            $table->string('email',100);
             $table->timestamps();
         });
     }
