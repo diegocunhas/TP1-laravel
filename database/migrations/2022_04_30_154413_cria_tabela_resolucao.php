@@ -22,7 +22,7 @@ return new class extends Migration
             $table->bigInteger('tipoRestaurante_id')->unsigned();
             $table->foreign('tipoRestaurante_id')->references('id')->on('tipo_restaurantes');
             //----utilizar restrição de unique composta para evitar a redundancia de informação-----//
-            $table->unique(['restaurante_id','tipoRestaurante_id']);
+            $table->unique(['restaurante_id','tipoRestaurante_id'],'unica');
         });
     }
 

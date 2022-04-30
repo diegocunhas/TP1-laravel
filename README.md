@@ -113,7 +113,13 @@ public function up()
         $table->bigInteger('tipoRestaurante_id')->unsigned();
         $table->foreign('tipoRestaurante_id')->references('id')->on('tipo_restaurantes');
         //----utilizar restrição de unique composta para evitar a redundancia de informação-----//
-        $table->unique(['restaurante_id','tipoRestaurante_id']);
+        $table->unique(['restaurante_id','tipoRestaurante_id'],'unica');
+
     });
 }
+~~~
+O ,'unica' serve para dar nome a condição unique, garantido assim que ela não estoure o limite de caracteres do sql.
+Caso a tabela não esteja sendo gerada utilizar
+~~~php
+php artisan migrate:fresh
 ~~~
