@@ -1,6 +1,8 @@
 # TP1 - Restaurante
 
-## Criar projeto
+
+
+## [1]: Criar projeto
 ~~~php
 composer create-project --prefer-dist laravel/laravel myProjectName
 ~~~

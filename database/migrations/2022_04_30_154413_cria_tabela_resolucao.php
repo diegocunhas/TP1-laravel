@@ -23,6 +23,8 @@ return new class extends Migration
             $table->foreign('tipoRestaurante_id')->references('id')->on('tipo_restaurantes');
             //----utilizar restrição de unique composta para evitar a redundancia de informação-----//
             $table->unique(['restaurante_id','tipoRestaurante_id'],'unica');
+            //todo parametro unique é tratado como chave secundaria,
+            //porém uma chave secundaria não precisa ser unique
         });
     }
 
