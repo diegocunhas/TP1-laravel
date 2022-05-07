@@ -51,14 +51,24 @@ Configurar dados de conexão ao banco de dados no arquivo .env - colocar em DB_D
 
 *MUDE O NOME DO ARQUIVO *.env.example* PARA *.env**
 
-gerar chave de criptografia do projeti
+gerar chave de criptografia do projeto
 ~~~php
-php artisan key:generator
+php artisan key:generate
 ~~~
 
 Opcionalmente se pode recriar o banco
 ~~~php
 php artisan migrate:fresh
+~~~
+
+Configuração do .env
+~~~
+DB_CONNECTION=mysql
+DB_HOST=sql10.freemysqlhosting.net
+DB_PORT=3306
+DB_DATABASE=sql10490707
+DB_USERNAME=sql10490707
+DB_PASSWORD=1bDcGVNXVB
 ~~~
 
 ## Testando configurações iniciais
