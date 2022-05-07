@@ -1,21 +1,24 @@
 # TP1 - Restaurante
 
-[Objetivo](#objetivos)
-[Criar Projeto](#criando-projeto)
-[Configurando Banco](#configurando-o-banco)
-[Criando o model](#criando-o-model)
-[Fazendo as migrações iniciais](#fazendo-as-migrações-iniciais)
-[Fazendo os requests](#fazendo-os-requests)
-[Configurando as migrations](#configurando-as-migrations)
-[Associação 1:n](#implementando-relacionamento-entre-tabelas-do-tipo-um-para-muitos)
-[Associação n:n](#implementando-relacionamento-entre-tabelas-do-tipo-muitos-para-muitos)
-[Chaves estrangeiras no model](#verificando-chaves-estrangeiras-no-model)
-[Gerando APP KEY](#gerando-app-key-para-o-arquivo-env)
-[Simulador para testes](#simulador-tinker)
-[Inserindo dados na tabela](#inserindo-dados-na-tabela)
-[Consultando objetos associados](#consultando-objetos-associados)
+[Objetivo](#objetivos) |
+[Criar Projeto](#criando-projeto) |
+[Configurando Banco](#configurando-o-banco) |
+[Testando configurações iniciais](#testando-configurações-iniciais) |
+[Criando o model](#criando-o-model) |
+[Fazendo as migrações iniciais](#fazendo-as-migrações-iniciais) |
+[Fazendo os requests](#fazendo-os-requests) |
+[Configurando as migrations](#configurando-as-migrations) |
+[Associação 1:n](#implementando-relacionamento-entre-tabelas-do-tipo-um-para-muitos) |
+[Associação n:n](#implementando-relacionamento-entre-tabelas-do-tipo-muitos-para-muitos) |
+[Chaves estrangeiras no model](#verificando-chaves-estrangeiras-no-model) |
+[Gerando APP KEY](#gerando-app-key-para-o-arquivo-env) |
+[Simulador para testes](#simulador-tinker) |
+[Inserindo dados na tabela](#inserindo-dados-na-tabela) |
+[Consultando objetos associados](#consultando-objetos-associados) |
+[belongsTo, belongsToMany, hasMany](#hasmany-belongstomany-belongsto) |
 
-## Objetivos
+
+## Objetivo
 Caso de estudo de como criar um projeto utilizando da metodologia MVC em laravel
 
 ## Criando Projeto
@@ -37,10 +40,31 @@ npm install
 npm run dev
 ~~~
 
+Caso o projeto seja clonado do github instale as bibliotecas utilizando
+~~~
+composer install
+~~~
+
 ## Configurando o Banco
 Criar banco de dados (xampp Mysql)
 Configurar dados de conexão ao banco de dados no arquivo .env - colocar em DB_DATABASE o nome do bd
 
+*MUDE O NOME DO ARQUIVO *.env.example* PARA *.env**
+
+gerar chave de criptografia do projeti
+~~~php
+php artisan key:generator
+~~~
+
+Opcionalmente se pode recriar o banco
+~~~php
+php artisan migrate:fresh
+~~~
+
+## Testando configurações iniciais
+~~~php
+php artisan serve
+~~~
 
 ## Criando o model:
 
@@ -218,9 +242,30 @@ $tipobra = TipoRestaurante::where('descricao','=','brasileiro')->first();
 $tipobra->belongsToMany(Restaurante::class)->get();
 ~~~
 
-### Todos os tipos do restaurante R1
+### Todos os tipos de comida do restaurante R1
 
 ~~~php
 $r1 = Restaurante::where('razaoSocial','=','R1')->first();
 $r1->belongsToMany(TipoRestaurante::class)->get();
 ~~~
+
+### Todos os pratos do restaurante R1
+
+~~~php
+$r1 = Restaurante::where('razaosSocial','=','R1')->first();
+$r1->hasMany(Prato::class)->get();
+~~~
+
+Note que enquanto em uma relação de muitos para muitos se usa o belongsToMany, para uma relação de um para muitos se o hasMany
+
+### Quais restaurantes vendem o prato P2
+
+~~~php
+$prato = Prato::find(2);
+$prato->belongsTo(Restaurante::class)->first();
+~~~
+
+## hasMany, belongsToMany, belongsTo
+Em associações de n:n usar belongsToMany em ambos os sentidos (consultando restaurante em tipo_restaurante || tiopo_restaurante em restaurante)
+
+Em associações 1:n, usar hasMany para navegar do lado 1 (Prato em Restaurante) para n e belongsTo para navegar do n para o lado 1 (Restaurante em Prato)
