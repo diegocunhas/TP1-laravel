@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Restaurante_tipoRestaurante', function (Blueprint $table) {
+        Schema::create('restaurante_tipo_restaurante', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             //----------Chaves Estrangeiras-----------//
             $table->bigInteger('restaurante_id')->unsigned();
             $table->foreign('restaurante_id')->references('id')->on('restaurantes');
-            $table->bigInteger('tipoRestaurante_id')->unsigned();
-            $table->foreign('tipoRestaurante_id')->references('id')->on('tipo_restaurantes');
+            $table->bigInteger('tipo_restaurante_id')->unsigned();
+            $table->foreign('tipo_restaurante_id')->references('id')->on('tipo_restaurantes');
             //----utilizar restrição de unique composta para evitar a redundancia de informação-----//
-            $table->unique(['restaurante_id','tipoRestaurante_id'],'unica');
+            $table->unique(['restaurante_id','tipo_restaurante_id'],'unica');
             //todo parametro unique é tratado como chave secundaria,
             //porém uma chave secundaria não precisa ser unique
         });

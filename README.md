@@ -1,8 +1,24 @@
 # TP1 - Restaurante
 
+[Objetivo](#objetivos)
+[Criar Projeto](#criando-projeto)
+[Configurando Banco](#configurando-o-banco)
+[Criando o model](#criando-o-model)
+[Fazendo as migrações iniciais](#fazendo-as-migrações-iniciais)
+[Fazendo os requests](#fazendo-os-requests)
+[Configurando as migrations](#configurando-as-migrations)
+[Associação 1:n](#implementando-relacionamento-entre-tabelas-do-tipo-um-para-muitos)
+[Associação n:n](#implementando-relacionamento-entre-tabelas-do-tipo-muitos-para-muitos)
+[Chaves estrangeiras no model](#verificando-chaves-estrangeiras-no-model)
+[Gerando APP KEY](#gerando-app-key-para-o-arquivo-env)
+[Simulador para testes](#simulador-tinker)
+[Inserindo dados na tabela](#inserindo-dados-na-tabela)
+[Consultando objetos associados](#consultando-objetos-associados)
 
+## Objetivos
+Caso de estudo de como criar um projeto utilizando da metodologia MVC em laravel
 
-## [1]: Criar projeto
+## Criando Projeto
 ~~~php
 composer create-project --prefer-dist laravel/laravel myProjectName
 ~~~
@@ -94,7 +110,6 @@ public function up()
 }
 ~~~
 
-
 ## Implementando relacionamento entre tabelas do tipo muitos para muitos
 
 Se cria uma tabela resolução, para isso e se faz uma nova migração (de preferencia a tabela resolução usa o nome das tabelas na ordem alfabética)
@@ -106,22 +121,106 @@ Depois se adiciona as chaves estrangeiras a tabela criada, se atentando a redund
 ~~~php
 public function up()
 {
-    Schema::create('Restaurante_tipoRestaurante', function (Blueprint $table) {
+    Schema::create('Restaurante_tipo_restaurante', function (Blueprint $table) {
         $table->id();
         $table->timestamps();
         //----------Chaves Estrangeiras-----------/
         $table->bigInteger('restaurante_id')->unsigned();
         $table->foreign('restaurante_id')->references('id')->on('restaurantes');
-        $table->bigInteger('tipoRestaurante_id')->unsigned();
-        $table->foreign('tipoRestaurante_id')->references('id')->on('tipo_restaurantes');
+        $table->bigInteger('tipo_restaurante_id')->unsigned();
+        $table->foreign('tipo_restaurante_id')->references('id')->on('tipo_restaurantes');
         //----utilizar restrição de unique composta para evitar a redundancia de informação-----//
-        $table->unique(['restaurante_id','tipoRestaurante_id'],'unica');
+        $table->unique(['restaurante_id','tipo_restaurante_id'],'unica');
 
     });
 }
 ~~~
+obs.: não usar camel case para nomes compostos, separar pelo _ como no exemplo acima tipo_restaurante em vez de tipoRestaurante
+
 O ,'unica' serve para dar nome a condição unique, garantido assim que ela não estoure o limite de caracteres do sql.
 Caso a tabela não esteja sendo gerada utilizar
 ~~~php
 php artisan migrate:fresh
+~~~
+
+## Verificando chaves estrangeiras no model
+
+Verificar se no model as chaves estrangeiras foram criadas
+
+~~~php
+class Prato extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['id','tipo','nome','preco','restaurante_id'];
+}
+~~~
+
+após alterar o model é necessário rever a migração, para adicionar esse parametro caso ele não exista
+
+~~~php
+    public function up()
+    {
+        Schema::create('pratos', function (Blueprint $table) {
+            $table->id();
+            $table->string('tipo',50);
+            $table->string('nome',50);
+            $table->decimal('preco',10,2);
+            $table->timestamps();
+            //-----------Criando chave Estrangeira
+            $table->bigInteger('restaurante_id')->unsigned();
+            $table->foreign('restaurante_id')->references('id')->on('restaurantes');
+            
+        });
+    }
+~~~
+
+## Gerando app key para o arquivo .env
+Sem uma key definida no arquivo .env a aplicação não conseguirá acessar o banco de dados.
+
+~~~php
+php artisan key:generate
+~~~
+
+## Simulador tinker
+permite codar em php no prompt para poder realizar testes
+~~~php
+php artisan tinker
+~~~
+
+## Inserindo dados na tabela
+
+Inserindo os dados diretamente via cli php
+~~~php
+Restaurante::create(['razaoSocial'=>'R2','cnpj'=>'4321','telefone'=>'088','endereco'=>'Rua y,33','email'=>'r2@restaurante.com'])
+
+TipoRestaurante::create(['descricao'=>'italiano'])
+
+Prato::create(['tipo'=>'prato1','nome'=>'teste','preco'=>'56789','restaurante_id'=>'1'])
+~~~
+
+Inserindo os dados de Restaurante,TipoRestaurante na tabela resolução Restaurante_TipoRestaurante
+
+~~~php
+$x = TipoRestaurante::find(1)
+$x->belongsToMany(Restaurante::class)->attach(1)
+~~~
+ao rodar o comando acima o prompt retorna null
+
+para relacionamentos n:n se utiliza o belongsToMany
+
+## Consultando objetos associados
+
+### Todos restaurantes do tipo brasileiro
+
+~~~php
+$tipobra = TipoRestaurante::where('descricao','=','brasileiro')->first();
+$tipobra->belongsToMany(Restaurante::class)->get();
+~~~
+
+### Todos os tipos do restaurante R1
+
+~~~php
+$r1 = Restaurante::where('razaoSocial','=','R1')->first();
+$r1->belongsToMany(TipoRestaurante::class)->get();
 ~~~
