@@ -24,25 +24,25 @@ class TipoRestauranteController extends Controller
         return View('tiporestaurante.index')->with('dados',TipoRestaurante::all());
     }
 
-    public function show(TipoRestaurante $tipoRestaurante)
+    public function show(TipoRestaurante $tiporestaurante)
     {
-        return View('tiporestaurante.show')->with('dados',$tipoRestaurante);
+        return View('tiporestaurante.show')->with('dados',$tiporestaurante);
     }
 
-    public function edit(TipoRestaurante $tipoRestaurante)
+    public function edit(TipoRestaurante $tiporestaurante)
     {
-        return View('tiporestaurante.edit')->with('dados',$tipoRestaurante);
+        return View('tiporestaurante.edit')->with('dados',$tiporestaurante);
     }
 
-    public function update(Request $request, TipoRestaurante $tipoRestaurante)
+    public function update(Request $request, TipoRestaurante $tiporestaurante)
     {
-        $tipoRestaurante->update($request->all());
+        $tiporestaurante->update($request->all());
         return View('tiporestaurante.index')->with('dados',TipoRestaurante::all());
     }
 
-    public function destroy(TipoRestaurante $tipoRestaurante)
+    public function destroy(TipoRestaurante $tiporestaurante)
     {
-        $tipoRestaurante->delete();
+        $tiporestaurante->delete();
         return View('tiporestaurante.index')->with('dados',TipoRestaurante::all());
     }
 }
