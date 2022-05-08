@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PratoController;
+use App\Http\Controllers\RestauranteController;
+use App\Http\Controllers\TipoRestauranteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +24,8 @@ Route::get('/', function () {
 });
 
 Route::resource('/pratos',PratoController::class);
+Route::resource('/restaurantes',RestauranteController::class);
+Route::resource('/tiporestaurantes',TipoRestauranteController::class);
 
 Auth::routes();
 

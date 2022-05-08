@@ -1,8 +1,11 @@
-<div class="container">
+@extends('layouts.mainlayout')
+
+@section('content')
+<div class="container pt-4">
 		<h3>Editar Prato</h3>
 		<div class="row">
-			<div class="col-sm-6">
-				<form action="/prato/{{$dados->id}}" method="post">
+			<div class="col-sm-6 text-center align-middle">
+				<form action="/pratos/{{$dados->id}}" method="post">
 					@csrf  <!-- token de segurança -->
 					@method('PUT') <!-- para acionar a função update do controller -->
 					<div class="form-group">
@@ -13,10 +16,10 @@
 						@endif	
 					</div>
 					<div>
-						<label for="descricao">Descricao</label>
-						<input type="text" name="descricao" id="descricao" class="form-control" value="{{empty(old('descricao')) ? $dados->descricao : old('descricao')}}"/>
-						@if($errors->has('descricao'))
-						<p>{{$errors->first('descricao')}}</p>
+						<label for="tipo">Tipo de alimento</label>
+						<input type="text" name="tipo" id="tipo" class="form-control" value="{{empty(old('tipo')) ? $dados->tipo : old('tipo')}}"/>
+						@if($errors->has('tipo'))
+						<p>{{$errors->first('tipo')}}</p>
 						@endif
 					</div>
 					<div>
@@ -33,9 +36,10 @@
 						<p class="text-danger">{{$errors->first('restaurante_id')}}</p>
 						@endif
 					</div>
-		    		<input type="submit" value="Alterar" class="btn btn-primary btn-sm"/>
-		    		<a href="/prato.index" class="btn btn-primary btn-sm">Voltar</a>
+		    		<input type="submit" value="Alterar" class="btn btn-primary btn-sm" />
+		    		<a href="/pratos" class="btn btn-primary btn-sm">Voltar</a>
 				</form>
 			</div>
 		</div>
 	</div>
+	@endsection('content')

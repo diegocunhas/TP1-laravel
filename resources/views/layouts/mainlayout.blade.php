@@ -6,7 +6,12 @@
     <body>
     @include('layouts.partials.nav')
     @include('layouts.partials.header')
-
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+            </div>
+        </div>
+    </div>
     @yield('content')
 
     @include('layouts.partials.footer')

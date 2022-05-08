@@ -20,7 +20,7 @@ class PratoController extends Controller
     public function store(Request $request)
     {
         Prato::create($request->all());
-        return redirect('/prato');
+        return View('prato.index')->with('dados',Prato::all());
     }
 
     public function show(Prato $prato)
@@ -36,11 +36,12 @@ class PratoController extends Controller
     public function update(Request $request, Prato $prato)
     {
         $prato->update($request->all());
-        return redirect('/prato');
+        return View('prato.index')->with('dados',Prato::all());
     }
 
     public function destroy(Prato $prato)
     {
         $prato->delete();
+        return View('prato.index')->with('dados',Prato::all());
     }
 }

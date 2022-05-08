@@ -7,79 +7,42 @@ use Illuminate\Http\Request;
 
 class TipoRestauranteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        return View('tiporestaurante.index')->with('dados',TipoRestaurante::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return View('tiporestaurante.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        TipoRestaurante::create($request->all());
+        return View('tiporestaurante.index')->with('dados',TipoRestaurante::all());
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TipoRestaurante  $tipoRestaurante
-     * @return \Illuminate\Http\Response
-     */
     public function show(TipoRestaurante $tipoRestaurante)
     {
-        //
+        return View('tiporestaurante.show')->with('dados',$tipoRestaurante);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\TipoRestaurante  $tipoRestaurante
-     * @return \Illuminate\Http\Response
-     */
     public function edit(TipoRestaurante $tipoRestaurante)
     {
-        //
+        return View('tiporestaurante.edit')->with('dados',$tipoRestaurante);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TipoRestaurante  $tipoRestaurante
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, TipoRestaurante $tipoRestaurante)
     {
-        //
+        $tipoRestaurante->update($request->all());
+        return View('tiporestaurante.index')->with('dados',TipoRestaurante::all());
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\TipoRestaurante  $tipoRestaurante
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(TipoRestaurante $tipoRestaurante)
     {
-        //
+        $tipoRestaurante->delete();
+        return View('tiporestaurante.index')->with('dados',TipoRestaurante::all());
     }
 }

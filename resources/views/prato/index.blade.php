@@ -2,24 +2,28 @@
 <head>
     <title>Prato</title>
 </head>
-<body>
-    @section('content')
-    <table >
-    <tr><th>id</th><th>Descrição</th><th>Nome</th><th>Preço</th><th>restaurante_id</th></tr>
-    @foreach($dados as $p)
-      <tr>
-          <td>{{ $p->id }}</td>
-          <td>{{ $p->tipo }}</td>
-          <td>{{ $p->nome }}</td>
-          <td>{{ $p->preco }}</td>
-          <td>{{ $p->restaurante_id }}</td>
-          <td>
-          <a href="/prato/{{$p->id}}" class="btn btn-primary btn-sm">Excluir</a>
-          <a href="/classroom/{{$p->id}}/edit" class="btn btn-primary btn-sm">Editar</a>
-          </td>
-      </tr>
-    @endforeach
+@section('content')
+<div class='container pt-4'></div>
+<div class='container'>
+    <table class="table table-striped table-bordered table-sm text-center align-middle">
+        <thread class="thread-dark">
+        <tr><th scope="col">id</th><th scope="col">Nome</th><th scope="col">Tipo de alimento</th><th scope="col">Preço</th><th scope="col">restaurante_id</th><th scope="col"><a href="/pratos/create" class="btn btn-primary btn-sm">Novo Prato</a></th></tr>
+            @foreach($dados as $p)
+            <tr>
+            <td>{{ $p->id }}</td>
+            <td>{{ $p->nome }}</td>
+            <td>{{ $p->tipo }}</td>
+            <td>{{ $p->preco }}</td>
+            <td>{{ $p->restaurante_id }}</td>
+            <td>
+            <a href="/pratos/{{$p->id}}" class="btn btn-primary btn-sm">Excluir</a>
+            <a href="/pratos/{{$p->id}}/edit" class="btn btn-primary btn-sm">Editar</a>
+            </td>
+            </tr>
+            @endforeach
+        </thread>
     </table>
-    @endsection('content')
+</div>
+@endsection('content')
 </body>
 </html>

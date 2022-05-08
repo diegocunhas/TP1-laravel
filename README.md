@@ -292,15 +292,15 @@ $prato->belongsTo(Restaurante::class)->first();
 
 ## Criando controller
 
-Durante a criação do model nó utilizamos o comando
+Durante a criação do model nós utilizamos o comando
 
 ~~~php
 php artisan make:model Prato --controller --resource --migration --factory
 ~~~
 
-para gerar o model, seu controller sua migration, sua factory.
+para gerar o model, seu controller sua migration, sua factory e seu resource (modelo padrão dento do controller).
 
-caso sea necessário gerar apenas o controller utilizamos
+caso seja necessário gerar apenas o controller utilizamos
 ~~~php
 php artisan make:controller PratoController
 ~~~
@@ -331,7 +331,8 @@ public function store(Request $request)
 {
     Prato::create( $request->all() );
     // $request->all() gera um vetor com os dados do formuário
-    return redirect('/prato');
+    return View('prato.index')->with('dados',Prato::all());
+    //retornamos para a view index após armazenar o formulário
 }
 ~~~
 
@@ -359,7 +360,8 @@ public function update(Request $request, Prato $prato)
 {
     $prato->update( $request->all() );
     // gravação
-    return redirect('/prato');
+    return View('prato.index')->with('dados',Prato::all());
+    //retornamos para a view index após atualizar os dados
 }
 ~~~
 
@@ -370,6 +372,8 @@ Excluir objeto do banco de dados
 public function destroy(Prato $prato)
 {
     $prato->delete();
+    return View('prato.index')->with('dados',Prato::all());
+    //retornamos para a view index após deletarmos o objeto
 }
 ~~~
 
@@ -381,32 +385,154 @@ Dentro de prato criamos as views que iremos acessar:
 - show.blade.php
 - edit.blade.php
 
-Exemplo simples de view com a relação de pratos criados na view show.blade.php
+Exemplo simples da view: 
+1. index.blade.php
 ~~~html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Prato</title>
-</head>
-<body>
-    <table>
-    <tr><th>id</th><th>Descrição</th><th>Nome</th><th>Preço</th><th>restaurante_id</th></tr>
-    @foreach($dados as $p)
-      <tr>
-          <td>{{ $p->id }}</td>
-          <td>{{ $p->tipo }}</td>
-          <td>{{ $p->nome }}</td>
-          <td>{{ $p->preco }}</td>
-          <td>{{ $p->restaurante_id }}</td>
-      </tr>
-    @endforeach
+@section('content')
+<div class='container pt-4'></div>
+<div class='container'>
+    <table class="table table-striped table-bordered table-sm text-center align-middle">
+        <thread class="thread-dark">
+        <tr><th scope="col">id</th><th scope="col">Nome</th><th scope="col">Tipo de alimento</th><th scope="col">Preço</th><th scope="col">restaurante_id</th><th scope="col"><a href="/pratos/create" class="btn btn-primary btn-sm">Novo Prato</a></th></tr>
+            @foreach($dados as $p)
+            <tr>
+            <td>{{ $p->id }}</td>
+            <td>{{ $p->nome }}</td>
+            <td>{{ $p->tipo }}</td>
+            <td>{{ $p->preco }}</td>
+            <td>{{ $p->restaurante_id }}</td>
+            <td>
+            <a href="/pratos/{{$p->id}}" class="btn btn-primary btn-sm">Excluir</a>
+            <a href="/pratos/{{$p->id}}/edit" class="btn btn-primary btn-sm">Editar</a>
+            </td>
+            </tr>
+            @endforeach
+        </thread>
     </table>
-</body>
-</html>
+</div>
+@endsection('content')
 ~~~
+
+2. create.blade.php
+~~~html
+@section('content')
+<div class="container pt-4">
+    <div class="row">
+        <div class="col-sm-6 text-center align-middle">
+            <h4>Adicionar Novo Prato</h4>
+            <form action="/pratos" method="post">
+                @csrf  <!-- token de segurança -->
+                @method('POST') <!-- para acionar a função update do controller -->
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" name="nome" id="nome" class="form-control" value="{{old('nome')}}"/>
+                    @if($errors->has('nome'))
+                    <p>{{$errors->first('nome')}}</p>
+                    @endif	
+                </div>
+                <div>
+                    <label for="tipo">Tipo de alimento</label>
+                    <input type="text" name="tipo" id="tipo" class="form-control" value="{{old('descricao')}}"/>
+                    @if($errors->has('tipo'))
+                    <p>{{$errors->first('tipo')}}</p>
+                    @endif
+                </div>
+                <div>
+                    <label for="preco">Preço</label>
+                    <input type="text" name="preco" id="preco" class="form-control" value="{{old('preco')}}"/>
+                    @if($errors->has('preco'))
+                    <p class="text-danger">{{$errors->first('preco')}}</p>
+                    @endif
+                </div>
+                <div>
+                    <label for="restaurante_id">Restaurante_id</label>
+                    <input type="text" name="restaurante_id" id="restaurante_id" class="form-control" value="{{old('restaurante_id')}}"/>
+                    @if($errors->has('restaurante_id'))
+                    <p class="text-danger">{{$errors->first('restaurante_id')}}</p>
+                    @endif
+                </div>
+                <input type="submit" value="Criar" class="btn btn-primary btn-sm"/>
+                <a href="/pratos" class="btn btn-primary btn-sm">Voltar</a>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection('content')
+~~~~
+
+3. edit.blade.php
+~~~html
+@section('content')
+<div class="container pt-4">
+		<h3>Editar Prato</h3>
+		<div class="row">
+			<div class="col-sm-6 text-center align-middle">
+				<form action="/pratos/{{$dados->id}}" method="post">
+					@csrf  <!-- token de segurança -->
+					@method('PUT') <!-- para acionar a função update do controller -->
+					<div class="form-group">
+						<label for="nome">Nome</label>
+						<input type="text" name="nome" id="nome" class="form-control" value="{{empty(old('nome')) ? $dados->nome : old('nome')}}"/>
+						@if($errors->has('nome'))
+						<p>{{$errors->first('nome')}}</p>
+						@endif	
+					</div>
+					<div>
+						<label for="tipo">Tipo de alimento</label>
+						<input type="text" name="tipo" id="tipo" class="form-control" value="{{empty(old('tipo')) ? $dados->tipo : old('tipo')}}"/>
+						@if($errors->has('tipo'))
+						<p>{{$errors->first('tipo')}}</p>
+						@endif
+					</div>
+					<div>
+						<label for="preco">Preço</label>
+						<input type="text" name="preco" id="preco" class="form-control" value="{{(empty(old('preco')))?$dados->preco:old('preco')}}"/>
+						@if($errors->has('preco'))
+						<p class="text-danger">{{$errors->first('preco')}}</p>
+						@endif
+					</div>
+                    <div>
+						<label for="restaurante_id">Restaurante_id</label>
+						<input type="text" name="restaurante_id" id="restaurante_id" class="form-control" value="{{(empty(old('restaurante_id')))?$dados->restaurante_id:old('restaurante_id')}}"/>
+						@if($errors->has('restaurante_id'))
+						<p class="text-danger">{{$errors->first('restaurante_id')}}</p>
+						@endif
+					</div>
+		    		<input type="submit" value="Alterar" class="btn btn-primary btn-sm" />
+		    		<a href="/pratos" class="btn btn-primary btn-sm">Voltar</a>
+				</form>
+			</div>
+		</div>
+	</div>
+	@endsection('content')
+~~~~
+
+4. show.blade.php
+~~~html
+ @section('content')
+    <div class="container text-center align-middle pt-4">
+        <h2>Prato {{$dados->nome}}</h2>
+        <ul class="list-group-flush">
+            <li class="list-item">id: {{$dados->id}}</li>
+            <li class="list-item">Nome: {{$dados->nome}}</li>
+            <li class="list-item">Tipo de Alimento: {{$dados->tipo}}</li>
+            <li class="list-item">Preço: {{$dados->preco}}</li>
+            <li class="list-item">Restaurante: {{$dados->restaurante_id}}</li>
+        </ul>
+        <form action="/pratos/{{$dados->id}}" method="post">
+            @csrf
+            @method('DELETE')
+            <input type="submit" value="Confirmar" class="btn btn-primary btn-sm">
+            <a href="/pratos" class="btn btn-primary btn-sm">Voltar</a>
+        </form>
+    </div>
+    @endsection('content')
+~~~~
+
+
 
 ## Rotas e direcionamentos
 Para acessar as views necessitamos de rotas que façam o link entre uri e view e entre controller e view.
 ~~~php
-Route::resource('pratos',PratoController::class);
+Route::resource('/pratos',PratoController::class);
 ~~~
