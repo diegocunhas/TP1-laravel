@@ -1,21 +1,27 @@
 # TP1 - Restaurante
 
-[Objetivo](#objetivos) |
-[Criar Projeto](#criando-projeto) |
-[Configurando Banco](#configurando-o-banco) |
-[Testando configurações iniciais](#testando-configurações-iniciais) |
-[Criando o model](#criando-o-model) |
-[Fazendo as migrações iniciais](#fazendo-as-migrações-iniciais) |
-[Fazendo os requests](#fazendo-os-requests) |
-[Configurando as migrations](#configurando-as-migrations) |
-[Associação 1:n](#implementando-relacionamento-entre-tabelas-do-tipo-um-para-muitos) |
-[Associação n:n](#implementando-relacionamento-entre-tabelas-do-tipo-muitos-para-muitos) |
-[Chaves estrangeiras no model](#verificando-chaves-estrangeiras-no-model) |
-[Gerando APP KEY](#gerando-app-key-para-o-arquivo-env) |
-[Simulador para testes](#simulador-tinker) |
-[Inserindo dados na tabela](#inserindo-dados-na-tabela) |
-[Consultando objetos associados](#consultando-objetos-associados) |
-[belongsTo, belongsToMany, hasMany](#hasmany-belongstomany-belongsto) |
+1. [Objetivo](#objetivos)
+2. [Criar Projeto](#criando-projeto)
+3. [Configurando Banco](#configurando-o-banco)
+4. [Testando configurações iniciais](#testando-configurações-iniciais) |
+5. [Criando o model](#criando-o-model)
+. [Fazendo as migrações iniciais](#fazendo-as-migrações-iniciais)
+7. [Fazendo os requests](#fazendo-os-requests)
+8. [Configurando as migrations](#configurando-as-migrations)
+9. [Associação 1:n](#implementando-relacionamento-entre-tabelas-do-tipo-um-para-muitos)
+10. [Associação n:n](#implementando-relacionamento-entre-tabelas-do-tipo-muitos-para-muitos)
+11. [Chaves estrangeiras no model](#verificando-chaves-estrangeiras-no-model)
+12. [Gerando APP KEY](#gerando-app-key-para-o-arquivo-env)
+13. [Simulador para testes](#simulador-tinker)
+14. [Inserindo dados na tabela](#inserindo-dados-na-tabela)
+15. [Consultando objetos associados](#consultando-objetos-associados)
+   1. [belongsTo, belongsToMany, hasMany](#hasmany-belongstomany-belongsto)
+16. [Criando Controller](#criando-controller)
+   1. [Index](#index)
+   2. [Create](#create)
+   3. [Read](#read)
+   4. [Update](#update)
+   5. [Delete](#delete)
 
 
 ## Objetivo
@@ -49,7 +55,7 @@ composer install
 Criar banco de dados (xampp Mysql)
 Configurar dados de conexão ao banco de dados no arquivo .env - colocar em DB_DATABASE o nome do bd
 
-*MUDE O NOME DO ARQUIVO *.env.example* PARA *.env**
+*MUDE O NOME DO ARQUIVO ==.env.example== PARA ==.env==*
 
 gerar chave de criptografia do projeto
 ~~~php
@@ -61,7 +67,7 @@ Opcionalmente se pode recriar o banco
 php artisan migrate:fresh
 ~~~
 
-Configuração do .env
+Configuração do .env para esse projeto
 ~~~
 DB_CONNECTION=mysql
 DB_HOST=sql10.freemysqlhosting.net
@@ -81,6 +87,10 @@ php artisan serve
 ~~~php
 php artisan make:model Prato --controller --resource --migration --factory
 ~~~
+--controller - cria PratoController
+--resource - cria no PratoController as função de CRUD (index, create, ...)
+--migration - class responsável por alterar o banco de dados: criar ou alterar tabelas
+--factory - inserir dados para testes
 
 adicionar atributo aos models
 ~~~php
@@ -245,21 +255,26 @@ para relacionamentos n:n se utiliza o belongsToMany
 
 ## Consultando objetos associados
 
-### Todos restaurantes do tipo brasileiro
+### hasMany, belongsToMany, belongsTo
+Em associações de n:n usar belongsToMany em ambos os sentidos (consultando restaurante em tipo_restaurante || tiopo_restaurante em restaurante)
+
+Em associações 1:n, usar hasMany para navegar do lado 1 (Prato em Restaurante) para n e belongsTo para navegar do n para o lado 1 (Restaurante em Prato)
+
+#### Todos restaurantes do tipo brasileiro
 
 ~~~php
 $tipobra = TipoRestaurante::where('descricao','=','brasileiro')->first();
 $tipobra->belongsToMany(Restaurante::class)->get();
 ~~~
 
-### Todos os tipos de comida do restaurante R1
+#### Todos os tipos de comida do restaurante R1
 
 ~~~php
 $r1 = Restaurante::where('razaoSocial','=','R1')->first();
 $r1->belongsToMany(TipoRestaurante::class)->get();
 ~~~
 
-### Todos os pratos do restaurante R1
+#### Todos os pratos do restaurante R1
 
 ~~~php
 $r1 = Restaurante::where('razaosSocial','=','R1')->first();
@@ -268,14 +283,130 @@ $r1->hasMany(Prato::class)->get();
 
 Note que enquanto em uma relação de muitos para muitos se usa o belongsToMany, para uma relação de um para muitos se o hasMany
 
-### Quais restaurantes vendem o prato P2
+#### Quais restaurantes vendem o prato P2
 
 ~~~php
 $prato = Prato::find(2);
 $prato->belongsTo(Restaurante::class)->first();
 ~~~
 
-## hasMany, belongsToMany, belongsTo
-Em associações de n:n usar belongsToMany em ambos os sentidos (consultando restaurante em tipo_restaurante || tiopo_restaurante em restaurante)
+## Criando controller
 
-Em associações 1:n, usar hasMany para navegar do lado 1 (Prato em Restaurante) para n e belongsTo para navegar do n para o lado 1 (Restaurante em Prato)
+Durante a criação do model nó utilizamos o comando
+
+~~~php
+php artisan make:model Prato --controller --resource --migration --factory
+~~~
+
+para gerar o model, seu controller sua migration, sua factory.
+
+caso sea necessário gerar apenas o controller utilizamos
+~~~php
+php artisan make:controller PratoController
+~~~
+
+O controller será responsável pelas funções e métodos que serão utilizados pela view.
+
+### Index
+Recuperar do banco de dados todos os pratos cadastrados e os envia para a view
+~~~php
+public function index()
+{
+    return View('prato.index')->with('dados',Prato::all());
+}
+~~~
+
+### Create
+Envia um formulário em branco para cadastrar novos pratos
+~~~php
+public function create()
+{
+    return View('prato.create');
+}
+~~~
+
+Armazena no banco de dados o novo prato com os dados recebidos do formulário gerado pela CREATE.
+~~~php
+public function store(Request $request)
+{
+    Prato::create( $request->all() );
+    // $request->all() gera um vetor com os dados do formuário
+    return redirect('/prato');
+}
+~~~
+
+### READ
+Aciona a view para apresentar os dados do prato recuperado automaticamaento do banco conforme ID
+~~~php
+public function show(Prato $prato)
+{
+    return View('prato.show')->with('dados',$prato);
+}
+~~~
+
+### UPDATE
+Envia formilário preenchido com os dados da máquina sendo editada
+~~~php
+public function edit(Prato $prato)
+{
+    return View('prato.edit')->with('dados',$prato);
+}
+~~~
+
+Regrava objeto prato no banco de dados com novos dados recebidos do formulário gerado por EDIT
+~~~php
+public function update(Request $request, Prato $prato)
+{
+    $prato->update( $request->all() );
+    // gravação
+    return redirect('/prato');
+}
+~~~
+
+### DELETE
+Excluir objeto do banco de dados
+
+~~~php
+public function destroy(Prato $prato)
+{
+    $prato->delete();
+}
+~~~
+
+## Criando as Views
+Primeiro precisamos ir em resources/views e criar o diretório com que iremos trabalhar (nesse caso o diretório prato).
+Dentro de prato criamos as views que iremos acessar:
+- index.blade.php
+- create.blade.php
+- show.blade.php
+- edit.blade.php
+
+Exemplo simples de view com a relação de pratos criados na view show.blade.php
+~~~html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prato</title>
+</head>
+<body>
+    <table>
+    <tr><th>id</th><th>Descrição</th><th>Nome</th><th>Preço</th><th>restaurante_id</th></tr>
+    @foreach($dados as $p)
+      <tr>
+          <td>{{ $p->id }}</td>
+          <td>{{ $p->tipo }}</td>
+          <td>{{ $p->nome }}</td>
+          <td>{{ $p->preco }}</td>
+          <td>{{ $p->restaurante_id }}</td>
+      </tr>
+    @endforeach
+    </table>
+</body>
+</html>
+~~~
+
+## Rotas e direcionamentos
+Para acessar as views necessitamos de rotas que façam o link entre uri e view e entre controller e view.
+~~~php
+Route::resource('pratos',PratoController::class);
+~~~
