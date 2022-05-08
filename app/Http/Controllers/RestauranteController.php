@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Restaurante;
 use Illuminate\Http\Request;
+use App\Models\TipoRestaurante;
+use App\Models\Prato;
 
 class RestauranteController extends Controller
 {
@@ -42,6 +44,18 @@ class RestauranteController extends Controller
     public function destroy(Restaurante $restaurante)
     {
         $restaurante->delete();
+        return View('restaurante.index')->with('dados',Restaurante::all());
+    }
+
+    public function getTipo($restaurante_id)
+    {
+        Restaurante::find($restaurante_id)->tiposrestaurante;
+        return View('restaurante.index')->with('dados',Restaurante::all());
+    }
+
+    public function getPrato($restaurante_id)
+    {
+        return Restaurante::query()->where('id','=',$restaurante_id)->first()->hasMany(Prato::class)->get('nome');
         return View('restaurante.index')->with('dados',Restaurante::all());
     }
 }

@@ -27,6 +27,8 @@ Route::resource('/pratos',PratoController::class);
 Route::resource('/restaurantes',RestauranteController::class);
 Route::resource('/tiporestaurantes',TipoRestauranteController::class);
 
+Route::get('/getprato/{id}', [RestauranteController::class, 'getPrato']);
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

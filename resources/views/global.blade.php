@@ -1,6 +1,6 @@
 <?php
-use App\Http\Controllers\PratoController;
-use App\Models\Prato;
+use App\Http\Controllers\RestauranteoController;
+use App\Models\Restaurante;
 ?>
 
 @extends('layouts.mainlayout')

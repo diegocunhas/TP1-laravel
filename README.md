@@ -256,7 +256,7 @@ para relacionamentos n:n se utiliza o belongsToMany
 ## Consultando objetos associados
 
 ### hasMany, belongsToMany, belongsTo
-Em associações de n:n usar belongsToMany em ambos os sentidos (consultando restaurante em tipo_restaurante || tiopo_restaurante em restaurante)
+Em associações de n:n usar belongsToMany em ambos os sentidos (consultando restaurante em tipo_restaurante || tipo_restaurante em restaurante)
 
 Em associações 1:n, usar hasMany para navegar do lado 1 (Prato em Restaurante) para n e belongsTo para navegar do n para o lado 1 (Restaurante em Prato)
 

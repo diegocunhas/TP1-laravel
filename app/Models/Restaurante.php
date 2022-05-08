@@ -10,4 +10,7 @@ class Restaurante extends Model
     use HasFactory;
 
     protected $fillable = ['id','razaoSocial','cnpj','telefone','endereco','email'];
+    
+    public $timestamps = false;
+
 }

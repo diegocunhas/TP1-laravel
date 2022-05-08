@@ -10,4 +10,11 @@ class TipoRestaurante extends Model
     use HasFactory;
 
     protected $fillable = ['id','descricao'];
+
+    public $timestamps = false;
+
+    public function restaurante()
+    {
+        return $this->belongsToMany(Restaurante::class,'restaurante_tipo_restaurante');
+    }
 }
