@@ -536,3 +536,56 @@ Para acessar as views necessitamos de rotas que façam o link entre uri e view e
 ~~~php
 Route::resource('/pratos',PratoController::class);
 ~~~
+
+## Autentificação
+
+dentro de RestauranteController adicionar o código:
+~~~php
+public function __construct(Request $request){
+        $this->middleware('auth'); //todas funcções requerem autentificação
+    }
+ || $this->middleware('auth',['except'=>['index']]); //exceção o index todos podem acessar
+~~~~
+
+~~~php
+public function create(){
+    return 'entrou create'.Auth::user()->name;
+    user() é um método que retorna o user da classe User
+}
+~~~
+
+Middleware (também chamados de filtro) existe entre a aplicação e o usuário.
+O middleware por exemplo verifica se o usuário é autenticado
+
+## API
+
+Cria uma classe que a finalidade serve para fazer a conversão para json
+~~~php
+php artisan make:resource Restaurante
+~~~~
+
+Criar um controller para a api
+~~~php
+php artisan make:controller RestauranteApiController
+~~~
+
+Criar rotas dentro de routes/api.php
+~~~php
+Route::get('/restaurante',[RestauranteApiController::class,'apiAll']);
+
+Route::get('/restaurante/{restaraunte}',[RestauranteApiController::class,'apiFind']);
+
+Route::post('/restaurante',[RestauranteApiController::class,'apiStore']);
+
+Route::put('/restaurante/{restaraunte}',[RestauranteApiController::class,'apiUpdate']);
+
+Route::delete('/restaurante/{restaraunte}',[RestauranteApiController::class,'apiDelete']);
+~~~
+Obs.  pode ser que se utilizar resources assim como na rota dos controllers funcione, porem não testei
+
+Colocar no cabeçalho de RestauranteController, 
+~~~php
+use App\Http\Model\Restaurante;
+use App\Http\Resources\Restaurante as RestauranteResource;
+~~~~
+o 'as' para apelidar restaurante pois: Restaurante é o nome do Model e o nome de Resources

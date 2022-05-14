@@ -9,6 +9,10 @@ use App\Models\Prato;
 
 class RestauranteController extends Controller
 {
+    public function __construct(Request $request){
+        $this->middleware('auth',['except'=>['index']]);
+    }
+
     public function index()
     {
         return View('restaurante.index')->with('dados',Restaurante::all());//
@@ -58,4 +62,5 @@ class RestauranteController extends Controller
         return Restaurante::query()->where('id','=',$restaurante_id)->first()->hasMany(Prato::class)->get('nome');
         return View('restaurante.index')->with('dados',Restaurante::all());
     }
+
 }
