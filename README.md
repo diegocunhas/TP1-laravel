@@ -3,7 +3,7 @@
 1. [Objetivo](#objetivos)
 2. [Criar Projeto](#criando-projeto)
 3. [Configurando Banco](#configurando-o-banco)
-4. [Testando configurações iniciais](#testando-configurações-iniciais) |
+4. [Testando configurações iniciais](#testando-configurações-iniciais)
 5. [Criando o model](#criando-o-model)
 . [Fazendo as migrações iniciais](#fazendo-as-migrações-iniciais)
 7. [Fazendo os requests](#fazendo-os-requests)
@@ -158,14 +158,14 @@ public function up()
 
 Se cria uma tabela resolução, para isso e se faz uma nova migração (de preferencia a tabela resolução usa o nome das tabelas na ordem alfabética)
 ~~~php
-php artisan make:migration CriaTabelaResolucao --create=Restaurante_tipoRestaurante
+php artisan make:migration CriaTabelaResolucao --create=restaurante_tipo_restaurante
 ~~~ 
 
 Depois se adiciona as chaves estrangeiras a tabela criada, se atentando a redundancia
 ~~~php
 public function up()
 {
-    Schema::create('Restaurante_tipo_restaurante', function (Blueprint $table) {
+    Schema::create('restaurante_tipo_restaurante', function (Blueprint $table) {
         $table->id();
         $table->timestamps();
         //----------Chaves Estrangeiras-----------/
