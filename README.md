@@ -5,7 +5,7 @@
 3. [Configurando Banco](#configurando-o-banco)
 4. [Testando configurações iniciais](#testando-configurações-iniciais)
 5. [Criando o model](#criando-o-model)
-. [Fazendo as migrações iniciais](#fazendo-as-migrações-iniciais)
+6. [Fazendo as migrações iniciais](#fazendo-as-migrações-iniciais)
 7. [Fazendo os requests](#fazendo-os-requests)
 8. [Configurando as migrations](#configurando-as-migrations)
 9. [Associação 1:n](#implementando-relacionamento-entre-tabelas-do-tipo-um-para-muitos)
