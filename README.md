@@ -53,6 +53,7 @@ composer install
 
 ## Configurando o Banco
 Criar banco de dados (xampp Mysql)
+==Nesse projeto foi utilizado o banco do servidor planetscale.com==
 Configurar dados de conexão ao banco de dados no arquivo .env - colocar em DB_DATABASE o nome do bd
 
 *MUDE O NOME DO ARQUIVO ==.env.example== PARA ==.env==*
