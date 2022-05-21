@@ -15,15 +15,24 @@
 13. [Simulador para testes](#simulador-tinker)
 14. [Inserindo dados na tabela](#inserindo-dados-na-tabela)
 15. [Consultando objetos associados](#consultando-objetos-associados)
-   1. [belongsTo, belongsToMany, hasMany](#hasmany-belongstomany-belongsto)
+  1. [belongsTo, belongsToMany, hasMany](#hasmany-belongstomany-belongsto)
 16. [Criando Controller](#criando-controller)
-   1. [Index](#index)
-   2. [Create](#create)
-   3. [Read](#read)
-   4. [Update](#update)
-   5. [Delete](#delete)
-17. [Autentificação](#autentificação)
-18. [API](#api)
+  1. [Index](#index)
+  2. [Create](#create)
+  3. [Read](#read)
+  4. [Update](#update)
+  5. [Delete](#delete)
+17. [Criando as Views](#criando-as-views)
+  1. [index](#1--indexbladephp)
+  2. [create](#2--createbladephp)
+  3. [edit](#3--editbladephp)
+  4. [show](#4--showbladephp)
+18. [Rotas e direcionamentos](#rotas-e-direcionamentos)
+19. [Autentificação](#autentificação)
+  1. [Generalizada](#generalizada)
+  2. [Especifica](#especifica)
+20. [API](#api)
+
 
 
 ## Objetivo
@@ -390,7 +399,7 @@ Dentro de prato criamos as views que iremos acessar:
 - edit.blade.php
 
 Exemplo simples da view: 
-1. index.blade.php
+1. #### index.blade.php
 ~~~html
 @section('content')
 <div class='container pt-4'></div>
@@ -417,7 +426,7 @@ Exemplo simples da view:
 @endsection('content')
 ~~~
 
-2. create.blade.php
+2.  #### create.blade.php
 ~~~html
 @section('content')
 <div class="container pt-4">
@@ -464,7 +473,7 @@ Exemplo simples da view:
 @endsection('content')
 ~~~~
 
-3. edit.blade.php
+3.  #### edit.blade.php
 ~~~html
 @section('content')
 <div class="container pt-4">
@@ -511,7 +520,7 @@ Exemplo simples da view:
 	@endsection('content')
 ~~~~
 
-4. show.blade.php
+4.  #### show.blade.php
 ~~~html
  @section('content')
     <div class="container text-center align-middle pt-4">
@@ -543,18 +552,37 @@ Route::resource('/pratos',PratoController::class);
 
 ## Autentificação
 
-dentro de RestauranteController adicionar o código:
+Criando toda a parte de autentificação no projeto, sem precisar programar nada (suportada no modelo MVC)
+~~~php
+composer require laravel/ui
+php artisan ui react --auth
+npm install
+npm run dev
+~~~~
+
+### Generalizada
+dentro de RestauranteController adicionar o código´abaixo para que todas as funções solicitem autentificação:
 ~~~php
 public function __construct(Request $request){
-        $this->middleware('auth'); //todas funcções requerem autentificação
-    }
- || $this->middleware('auth',['except'=>['index']]); //exceção o index todos podem acessar
+    $this->middleware('auth'); //todas funções requerem autentificação
+}
+~~~
+
+### Especifica
+ou o código abaixo para deixar o index como publico (qualquer um pode acessar), mas as outras funções requerem autentificação
+~~~php
+public function __construct(Request $request){
+    $this->middleware('auth',['except'=>['index']]); //exceção o index todos podem acessar
+}
 ~~~~
+
+### Autorização por usuário
+
 
 ~~~php
 public function create(){
     return 'entrou create'.Auth::user()->name;
-    user() é um método que retorna o user da classe User
+    // user() é um método que retorna o user da classe User
 }
 ~~~
 
