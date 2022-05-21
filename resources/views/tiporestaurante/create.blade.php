@@ -15,6 +15,7 @@
                     <p>{{$errors->first('descricao')}}</p>
                     @endif	
                 </div>
+                <br>
                 <input type="submit" value="Criar" class="btn btn-primary btn-sm"/>
                 <a href="/tiporestaurantes" class="btn btn-primary btn-sm">Voltar</a>
             </form>

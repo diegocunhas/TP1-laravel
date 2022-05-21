@@ -36,6 +36,7 @@
                     <p class="text-danger">{{$errors->first('restaurante_id')}}</p>
                     @endif
                 </div>
+                <br>
                 <input type="submit" value="Criar" class="btn btn-primary btn-sm"/>
                 <a href="/pratos" class="btn btn-primary btn-sm">Voltar</a>
             </form>

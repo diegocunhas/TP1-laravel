@@ -1,7 +1,3 @@
-<?php
-use App\Http\Controllers\RestauranteoController;
-use App\Models\Restaurante;
-?>
 
 @extends('layouts.mainlayout')
 @section('content')

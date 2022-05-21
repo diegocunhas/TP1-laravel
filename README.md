@@ -15,22 +15,22 @@
 13. [Simulador para testes](#simulador-tinker)
 14. [Inserindo dados na tabela](#inserindo-dados-na-tabela)
 15. [Consultando objetos associados](#consultando-objetos-associados)
-  1. [belongsTo, belongsToMany, hasMany](#hasmany-belongstomany-belongsto)
+    + [belongsTo, belongsToMany, hasMany](#hasmany-belongstomany-belongsto)
 16. [Criando Controller](#criando-controller)
-  1. [Index](#index)
-  2. [Create](#create)
-  3. [Read](#read)
-  4. [Update](#update)
-  5. [Delete](#delete)
+    + [Index](#index)
+    + [Create](#create)
+    + [Read](#read)
+    + [Update](#update)
+    + [Delete](#delete)
 17. [Criando as Views](#criando-as-views)
-  1. [index](#1--indexbladephp)
-  2. [create](#2--createbladephp)
-  3. [edit](#3--editbladephp)
-  4. [show](#4--showbladephp)
+    + [index](#1--indexbladephp)
+    + [create](#2--createbladephp)
+    + [edit](#3--editbladephp)
+    + [show](#4--showbladephp)
 18. [Rotas e direcionamentos](#rotas-e-direcionamentos)
 19. [Autentificação](#autentificação)
-  1. [Generalizada](#generalizada)
-  2. [Especifica](#especifica)
+    + [Generalizada](#generalizada)
+    + [Especifica](#especifica)
 20. [API](#api)
 
 
@@ -615,9 +615,70 @@ Route::delete('/restaurante/{restaraunte}',[RestauranteApiController::class,'api
 ~~~
 Obs.  pode ser que se utilizar resources assim como na rota dos controllers funcione, porem não testei
 
-Colocar no cabeçalho de RestauranteController, 
+Colocar no cabeçalho de RestauranteApiController, 
 ~~~php
 use App\Http\Model\Restaurante;
 use App\Http\Resources\Restaurante as RestauranteResource;
 ~~~~
 o 'as' para apelidar restaurante pois: Restaurante é o nome do Model e o nome de Resources
+
+Alterar as funções dentro de RestauranteApiController
+~~~php
+class RestauranteApiController extends Controller
+{
+    // rota = get + url: /api/restaurante
+    public function apiAll(Restaurante $restaurante){
+        $todosRest = Restaurante::all();
+        return RestauranteResource::collection($todosRest);
+    }
+
+    // rota = get + url: /api/restaurante/2
+    public function apiFind(Restaurante $restaurante){
+        return new RestauranteResource($restaurante);
+    }
+
+    // rota = post + url: /api/restaurante + json com novos dados
+    public function apiStore(Request $request){
+        try{
+            $r = Restaurante::create($request->all());
+            return response()->json($r,201);
+        }
+        catch(\Exception $ex){
+            return response()->json(null,400);
+        }
+    }
+    
+    // rota = put + url: /api/restaurante/2 + json com novos dados
+    public function apiUpdate(Request $request, Restaurante $restaurante){
+        try{
+            $r = $restaurante->update($request->all());
+            return response()->json($r,201);
+        }
+        catch(\Exception $ex){
+            return response()->json(null,400);
+        }
+    }
+
+    // rota = delete + url: /api/restaurante/2
+    public function apiDelete(Restaurante $restaurante){
+        try{
+            $restaurante->delete();
+            return response()->json(null,204);
+        }
+        catch(\Exception $ex){
+            return response()->json(null,400);
+        }
+    }
+}
+~~~
+
+
+para pegar os dados da tabela de pratos e trabalhalos em restaurante precisamos ir em RestauranteController e adicionar na função da view que queremos aquele dado uma variavel para a view poder acessar. exemplo:
+~~~php
+    public function create()
+    {
+        $resta = Restaurante::all();
+        return View('restaurante.create')->with('restauranteview',$resta);
+    }
+    //dentro da view restaurante/create.blade.php podemos agora chamar a variavel restauranteview que irá conter todos os restaurantes
+~~~

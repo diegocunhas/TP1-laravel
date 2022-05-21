@@ -20,7 +20,8 @@ class RestauranteController extends Controller
 
     public function create()
     {
-        return View('restaurante.create');
+        $resta = Restaurante::all();
+        return View('restaurante.create')->with('restauranteview',$resta);
     }
 
     public function store(Request $request)

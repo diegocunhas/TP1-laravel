@@ -1,8 +1,3 @@
-<?php
-use App\Http\Controllers\RestauranteController;
-$prato = ((RestauranteController::class)->getPrato(1));
-
-?>
 
 @extends('layouts.mainlayout')
 <head>
@@ -23,7 +18,7 @@ $prato = ((RestauranteController::class)->getPrato(1));
             <td>{{ $rest->endereco }}</td>
             <td>{{ $rest->email }}</td>
             <td>
-            {{ $prato }}, 
+                <!-- --> 
             <td>
             <td>
             <a href="/restaurantes/{{$r->id}}" class="btn btn-primary btn-sm">Excluir</a>
