@@ -1,6 +1,6 @@
 # TP1 - Restaurante
 
-1. [Objetivo](#objetivos)
+1. [Objetivo](#objetivo)
 2. [Criar Projeto](#criando-projeto)
 3. [Configurando Banco](#configurando-o-banco)
 4. [Testando configurações iniciais](#testando-configurações-iniciais)
@@ -22,10 +22,13 @@
    3. [Read](#read)
    4. [Update](#update)
    5. [Delete](#delete)
+17. [Autentificação](#autentificação)
+18. [API](#api)
 
 
 ## Objetivo
-Caso de estudo de como criar um projeto utilizando da metodologia MVC em laravel
+O objetivo desse projeto é desenvolver uma aplicação simples de cadastro e manutenção de restaurantes em php.
+Essa documentação tem como objetivo ser um tutorial de como inicializar operações básicas em php.
 
 ## Criando Projeto
 ~~~php
@@ -257,9 +260,9 @@ para relacionamentos n:n se utiliza o belongsToMany
 ## Consultando objetos associados
 
 ### hasMany, belongsToMany, belongsTo
-Em associações de n:n usar belongsToMany em ambos os sentidos (consultando restaurante em tipo_restaurante || tipo_restaurante em restaurante)
+Em associações de n:n usar belongsToMany em ambos os sentidos (consultando restaurante em tipo_restaurante ou consultando tipo_restaurante em restaurante)
 
-Em associações 1:n, usar hasMany para navegar do lado 1 (Prato em Restaurante) para n e belongsTo para navegar do n para o lado 1 (Restaurante em Prato)
+Em associações 1:n, usar hasMany para navegar do lado 1 para n (Prato em Restaurante) e belongsTo para navegar de n para o lado 1 (Restaurante em Prato)
 
 #### Todos restaurantes do tipo brasileiro
 
