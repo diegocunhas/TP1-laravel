@@ -20,12 +20,17 @@ class RestauranteController extends Controller
 
     public function create()
     {
-        return View('restaurante.create');
+        $tipoRest = TipoRestaurante::all();
+        return View('restaurante.create')->with('tipoR',$tipoRest);
     }
 
     public function store(Request $request)
     {
-        Restaurante::create($request->all());
+        $r = Restaurante::create($request->all());
+        // Associando/vinculando restaurante criado ao tipoRestaurante
+        $tipoid = $request->input('tipo_restaurante_id');
+        $r->belongsToMany(TipoRestaurante::class)->attach($tipoid);
+        //na operação acima a aplicação está gravando a informação na tabela resolução
         return View('restaurante.index')->with('dados',Restaurante::all());
     }
 

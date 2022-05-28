@@ -13,6 +13,16 @@
             <li class="list-item">Telefone: {{$dados->telefone}}</li>
             <li class="list-item">Endereço: {{$dados->endereco}}</li>
             <li class="list-item">Email: {{$dados->email}}</li>
+            <li class="list-item">Pratos:
+                @foreach( $dados->hasMany(App\Models\Prato::class)->get() as $p)
+                 {{$p->nome}}, 
+            @endforeach
+            </li>
+            <li class="list-item">Tipo de Restaurante:
+                @foreach( $dados->belongsToMany(App\Models\TipoRestaurante::class)->get() as $t)
+                 {{$t->descricao}} <br/> 
+            @endforeach
+            </li>
         </ul>
         <form action="/restaurantes/{{$dados->id}}" method="post">
             @csrf

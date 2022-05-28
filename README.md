@@ -23,10 +23,11 @@
     + [Update](#update)
     + [Delete](#delete)
 17. [Criando as Views](#criando-as-views)
-    + [index](#1--indexbladephp)
-    + [create](#2--createbladephp)
-    + [edit](#3--editbladephp)
-    + [show](#4--showbladephp)
+        | [index](#1--indexbladephp)
+        | [create](#2--createbladephp)
+        | [edit](#3--editbladephp)
+        | [show](#4--showbladephp) |
+    1. [Exibindo Relacionamentos](#exibindo-relacionamentos)
 18. [Rotas e direcionamentos](#rotas-e-direcionamentos)
 19. [Autentificação](#autentificação)
     + [Generalizada](#generalizada)
@@ -549,15 +550,57 @@ Na view index de pratos nós exibimos o restaurante_id
 <td>{{ $p->restaurante_id }}</td>
 ~~~
 mas e se quiséssemos exibir o nome do restaurante?
-para isso utilizariamos o belongsTo, pois é uma relação 1:n indo de filho para pai 
+para isso, na view index de pratos, utilizamos o belongsTo (pois é uma relação 1:n indo de filho para pai)
 ~~~php
 <td> {{ $p->belongsTo(Restaurante::class)->first()->razaoSocial }} </td>
 ~~~
 no exemplo acima utilizamos first() pois o prato só está vinculado a um restaurante, caso existissem mais vinculos e quizessemos trazer todos utilizariamos o get().
 Um exemplo disso seria exibir na view show do restaurante todos os pratos vinculados a ele
 ~~~php
-<td> {{ $p->hasMany(Prato::class)->get()->razaoSocial }} </td>
+<li class="list-item">Pratos:
+    @foreach( $dados->hasMany(App\Models\Prato::class)->get() as $p)
+        {{$p->nome}}, 
+    @endforeach 
+</li>
 ~~~
+No exemplo acima utilizamos o o caminho do Prato (App\Models\Prato::class) para navegar até a associação
+
+Para acessar dados de uma relação n:n se utiliza de belongsToMany da mesma forma que os exemplos anteriores.
+
+#### Criando Associações
+
+Para o exemplo de criar a associação entre Restaurante e TipoRestaurante, primeiro iremos alterar a forma como a informação será armazenada.
+no método store de RestauranteController
+~~~php
+public function store(Request $request)
+{
+    $r = Restaurante::create($request->all());
+    // Associando/vinculando restaurante criado ao tipoRestaurante
+    $tipoid = $request->input('tipo_restaurante_id');
+    $r->belongsToMany(TipoRestaurante::class)->attach($tipoid);
+    //na operação acima a aplicação está gravando a informação na tabela resolução
+    return View('restaurante.index')->with('dados',Restaurante::all());
+}
+~~~
+já na view create de restaurante iremos adicionar
+~~~php
+<label for="tipo_restaurante_id">Tipo de Restaurante</label>
+    <select name="tipo_restaurante_id" id="tipo_restaurante_id" class="form-control" value="" >
+     @foreach ($tipoR as $t)
+     <option value="{{$t->id}}" align="center" >{{$t->descricao}}</option>
+     @endforeach
+</select> 
+~~~
+E para visualizar o tipo de restaurante na view show de restaurante podemos utilizar
+~~~php
+<li class="list-item">Tipo de Restaurante:
+    @foreach( $dados->belongsToMany(App\Models\TipoRestaurante::class)->get() as $t)
+        {{$t->descricao}} <br/> 
+    @endforeach
+</li>
+~~~
+
+attach = associa | deattach = dessasocia
 
 
 ## Rotas e direcionamentos
