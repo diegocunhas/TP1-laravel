@@ -9,19 +9,18 @@ use App\Models\Prato;
 
 class RestauranteController extends Controller
 {
-    public function __construct(Request $request){
-        $this->middleware('auth',['except'=>['index']]);
-    }
+    // public function __construct(Request $request){
+    //     $this->middleware('auth',['except'=>['index']]);
+    // }
 
     public function index()
     {
-        return View('restaurante.index')->with('dados',Restaurante::all());//
+        return View('restaurante.index')->with('dados',Restaurante::all());
     }
 
     public function create()
     {
-        $resta = Restaurante::all();
-        return View('restaurante.create')->with('restauranteview',$resta);
+        return View('restaurante.create');
     }
 
     public function store(Request $request)
@@ -52,16 +51,16 @@ class RestauranteController extends Controller
         return View('restaurante.index')->with('dados',Restaurante::all());
     }
 
-    public function getTipo($restaurante_id)
-    {
-        Restaurante::find($restaurante_id)->tiposrestaurante;
-        return View('restaurante.index')->with('dados',Restaurante::all());
-    }
+    // public function getTipo($restaurante_id)
+    // {
+    //     Restaurante::find($restaurante_id)->tiposrestaurante;
+    //     return View('restaurante.index')->with('dados',Restaurante::all());
+    // }
 
-    public function getPrato($restaurante_id)
-    {
-        return Restaurante::query()->where('id','=',$restaurante_id)->first()->hasMany(Prato::class)->get('nome');
-        return View('restaurante.index')->with('dados',Restaurante::all());
-    }
+    // public function getPrato($restaurante_id)
+    // {
+    //     return Restaurante::query()->where('id','=',$restaurante_id)->first()->hasMany(Prato::class)->get('nome');
+    //     return View('restaurante.index')->with('dados',Restaurante::all());
+    // }
 
 }

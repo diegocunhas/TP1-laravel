@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prato;
+use App\Models\Restaurante;
 use Illuminate\Http\Request;
 
 class PratoController extends Controller
@@ -14,7 +15,8 @@ class PratoController extends Controller
 
     public function create()
     {
-        return View('prato.create');
+        $resta = Restaurante::all();
+        return View('prato.create')->with('rest',$resta);
     }
 
     public function store(Request $request)
@@ -30,13 +32,15 @@ class PratoController extends Controller
 
     public function edit(Prato $prato)
     {
-        return View('prato.edit')->with('dados',$prato);
+        $resta = Restaurante::all();        
+        return View('prato.edit')->with('dados',$prato)->with('rest',$resta);
     }
 
     public function update(Request $request, Prato $prato)
     {
         $prato->update($request->all());
-        return View('prato.index')->with('dados',Prato::all());
+        $resta = Restaurante::all();
+        return View('prato.index')->with('dados',Prato::all())->with('rest',$resta);
     }
 
     public function destroy(Prato $prato)

@@ -30,11 +30,16 @@
                     @endif
                 </div>
                 <div>
-                    <label for="restaurante_id">Restaurante_id</label>
-                    <input type="text" name="restaurante_id" id="restaurante_id" class="form-control" value="{{old('restaurante_id')}}"/>
+                    <label for="restaurante_id">Restaurante</label>
+                    <select name="restaurante_id" id="restaurante_id" class="form-control" value="{{old('restaurante_id')}}" >
+                        @foreach ($rest as $r)
+                        <option value="{{$r->id}}" align="center" >{{$r->razaoSocial}}</option>
+                        @endforeach
+                    </select>
+                    <!-- <input type="text" name="restaurante_id" id="restaurante_id" class="form-control" value="{{old('restaurante_id')}}"/>
                     @if($errors->has('restaurante_id'))
                     <p class="text-danger">{{$errors->first('restaurante_id')}}</p>
-                    @endif
+                    @endif -->
                 </div>
                 <br>
                 <input type="submit" value="Criar" class="btn btn-primary btn-sm"/>

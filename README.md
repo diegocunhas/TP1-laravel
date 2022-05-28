@@ -540,8 +540,24 @@ Exemplo simples da view:
         </form>
     </div>
     @endsection('content')
-~~~~
+~~~
 
+### Exibindo relacionamentos
+
+Na view index de pratos nós exibimos o restaurante_id
+~~~php
+<td>{{ $p->restaurante_id }}</td>
+~~~
+mas e se quiséssemos exibir o nome do restaurante?
+para isso utilizariamos o belongsTo, pois é uma relação 1:n indo de filho para pai 
+~~~php
+<td> {{ $p->belongsTo(Restaurante::class)->first()->razaoSocial }} </td>
+~~~
+no exemplo acima utilizamos first() pois o prato só está vinculado a um restaurante, caso existissem mais vinculos e quizessemos trazer todos utilizariamos o get().
+Um exemplo disso seria exibir na view show do restaurante todos os pratos vinculados a ele
+~~~php
+<td> {{ $p->hasMany(Prato::class)->get()->razaoSocial }} </td>
+~~~
 
 
 ## Rotas e direcionamentos
@@ -682,3 +698,4 @@ para pegar os dados da tabela de pratos e trabalhalos em restaurante precisamos 
     }
     //dentro da view restaurante/create.blade.php podemos agora chamar a variavel restauranteview que irá conter todos os restaurantes
 ~~~
+

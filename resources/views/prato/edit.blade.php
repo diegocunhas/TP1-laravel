@@ -31,10 +31,17 @@
 					</div>
                     <div>
 						<label for="restaurante_id">Restaurante_id</label>
-						<input type="text" name="restaurante_id" id="restaurante_id" class="form-control" value="{{(empty(old('restaurante_id')))?$dados->restaurante_id:old('restaurante_id')}}"/>
-						@if($errors->has('restaurante_id'))
-						<p class="text-danger">{{$errors->first('restaurante_id')}}</p>
-						@endif
+						<!-- <input type="text" name="restaurante_id" id="restaurante_id" class="form-control" value="{{(empty(old('restaurante_id')))?$dados->restaurante_id:old('restaurante_id')}}"/> -->
+						<select name="restaurante_id" id="restaurante_id" class="form-control" value="{{old('restaurante_id')}}" >
+                        @foreach ($rest as $r) 
+						<!-- esse if serve para mostrar na lista de seleção o valor anteriormente nela, substitui o usoo do old('restaurante_id') -->
+						 @if($dados->restaurante_id == $r->id)
+                         <option value="{{$r->id}}" align="center" selected >{{$r->razaoSocial}}</option>
+                         @else
+						 <option value="{{$r->id}}" align="center" >{{$r->razaoSocial}}</option>
+						 @endif
+						@endforeach
+                    	</select>
 					</div>
 		    		<input type="submit" value="Alterar" class="btn btn-primary btn-sm" />
 		    		<a href="/pratos" class="btn btn-primary btn-sm">Voltar</a>

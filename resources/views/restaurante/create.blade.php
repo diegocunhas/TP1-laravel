@@ -43,6 +43,7 @@
                     <p class="text-danger">{{$errors->first('email')}}</p>
                     @endif
                 </div>
+                <br>
                 <input type="submit" value="Criar" class="btn btn-primary btn-sm"/>
                 <a href="/restaurantes" class="btn btn-primary btn-sm">Voltar</a>
             </form>

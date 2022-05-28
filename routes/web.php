@@ -27,7 +27,7 @@ Route::resource('/pratos',PratoController::class);
 Route::resource('/restaurantes',RestauranteController::class);
 Route::resource('/tiporestaurantes',TipoRestauranteController::class);
 
-Route::get('/getprato/{id}', [RestauranteController::class, 'getPrato']);
+// Route::get('/getprato/{id}', [RestauranteController::class, 'getPrato']);
 
 Auth::routes();
 
