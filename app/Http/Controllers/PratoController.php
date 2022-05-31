@@ -10,7 +10,8 @@ class PratoController extends Controller
 {
     public function index()
     {
-        return View('prato.index')->with('dados',Prato::all());
+        $resta = Restaurante::all();
+        return View('prato.index')->with('dados',Prato::all())->with('rest',$resta);
     }
 
     public function create()

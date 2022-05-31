@@ -552,7 +552,14 @@ Na view index de pratos nós exibimos o restaurante_id
 mas e se quiséssemos exibir o nome do restaurante?
 para isso, na view index de pratos, utilizamos o belongsTo (pois é uma relação 1:n indo de filho para pai)
 ~~~php
-<td> {{ $p->belongsTo(Restaurante::class)->first()->razaoSocial }} </td>
+<td> {{ $p->belongsTo("App\Models\Restaurante"::class)->first()->razaoSocial }} </td>
+<!--Laravel considera implicitamente que a chave estrangeira de restaurante é restaurante_id -->
+~~~
+No código acima iremos buscar o valor de razaoSocial na tabela Restaurantes para o objeto cujo chave estrangeira é restaurante_id. 
+Caso a chave primária da tabela Restaurantes seja outra, é necessário passar essa iformação junto com o belongsTo
+~~~php
+<td> {{ $p->belongsTo("App\Models\Restaurante"::class,'id')->first()->razaoSocial }} </td>
+<!--Definindo explicitamente a chave id como chave estrangeira-->
 ~~~
 no exemplo acima utilizamos first() pois o prato só está vinculado a um restaurante, caso existissem mais vinculos e quizessemos trazer todos utilizariamos o get().
 Um exemplo disso seria exibir na view show do restaurante todos os pratos vinculados a ele
