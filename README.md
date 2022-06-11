@@ -749,3 +749,69 @@ para pegar os dados da tabela de pratos e trabalhalos em restaurante precisamos 
     //dentro da view restaurante/create.blade.php podemos agora chamar a variavel restauranteview que irá conter todos os restaurantes
 ~~~
 
+### Resumo Trabalhando com relacionamentos
+
+3 tabelas, funcionarios departamentos e projetos
+departamento 1:n funcionario
+funcionario n:n projeto
+
+podemos realizar uma busca dentro de departamento
+~~~php
+$d = Departamento::where('nome','=','RH')->first();
+~~~
+
+para buscar a partir de departamento na tabela funcionario
+~~~php
+$fs = $d->hasMany(Funcionario::class)->get();
+~~~
+
+Normalmente no model Departamento se cria uma função publica
+~~php
+public function funcionarios(){
+    return $this->hasMany(Funcionario::class);
+}
+~~~
+
+com o método criado acima podemos chamar o método funcionarios
+~~~php
+$fs = $d->funcionarios()->get();
+~~~
+
+Buscando departamento a partir de funcionario
+~~~php
+$f = Funcionario::find(103);
+$d = $f->belongsTo(Departamento::class)->first();
+~~~
+
+para otimizar o código podemos criar no model funcionario
+~~~php
+public funcrion departamento(){
+return $this->belongsTo(Departamento::class);
+}
+~~~
+o que resultaria em
+~~~php
+$d = $f->departamento()->first();
+~~~
+
+na relação entre funcionario e projeto se utiliza belongsToMany
+
+para cehgar de funcionario em projeto
+~~~php
+$ps = $f->belongsToMany(Projeto::class)->get();
+~~~~
+
+~~~php
+$ps = $f->projetos()->get(); 
+$f->projetos()->attach(57); //funcionario 103 fica associado ao projeto 57
+~~~
+
+Para acessar funcionário a partir de projeto
+dentro do model projeto
+~~~php
+Class Proheto{
+    public function funcionarios(){
+        return $this->belongsToMany(Funcionario::class);
+    }
+}
+~~~

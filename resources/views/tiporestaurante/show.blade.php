@@ -9,6 +9,13 @@
         <ul class="list-group-flush">
             <li class="list-item">id: {{$dados->id}}</li>
             <li class="list-item">Descrição: {{$dados->descricao}}</li>
+            <li class="list-item">Restaurante: 
+                @if($dados->restaurante()->count()==0)
+                    <p style="color: blue;">Sem restaurante vinculado</p>
+                @else
+                    {{ $dados->restaurante()->first()->razaoSocial }}
+                @endif
+            </li>
         </ul>
         <form action="/tiporestaurantes/{{$dados->id}}" method="post">
             @csrf

@@ -46,7 +46,7 @@
                 <!-- Em restaurante não existe a chave estrangeira tipo_restaurante_id, vai passar para o controller
                  como tipo_restaurante_id para esse dado poder ser trabalhado -->
                     <label for="tipo_restaurante_id">Tipo de Restaurante</label>
-                    <select name="tipo_restaurante_id" id="tipo_restaurante_id" class="form-control" value="" >
+                    <select multiple name="tipo_restaurante_id" id="tipo_restaurante_id" class="form-control" value="" >
                         @foreach ($tipoR as $t)
                         <option value="{{$t->id}}" align="center" >{{$t->descricao}}</option>
                         @endforeach

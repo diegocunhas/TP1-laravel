@@ -10,6 +10,7 @@ class TipoRestauranteController extends Controller
 
     public function index()
     {
+        
         return View('tiporestaurante.index')->with('dados',TipoRestaurante::all());
     }
 
